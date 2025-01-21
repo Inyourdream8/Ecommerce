@@ -1,0 +1,1 @@
+import { payloadCloud } from '@payloadcms/plugin-cloud'
