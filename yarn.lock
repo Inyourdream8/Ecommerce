@@ -2015,6 +2015,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@payloadcms/template-ecommerce@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@payloadcms/template-ecommerce@workspace:."
+  dependencies:
+    "@payloadcms/next": "npm:^3.18.0"
+    "@payloadcms/payload-cloud": "npm:^3.18.0"
+    "@payloadcms/richtext-lexical": "npm:^3.18.0"
+    cross-env: "npm:^7.0.3"
+    graphql: "npm:^16.10.0"
+    payload: "npm:^3.18.0"
+    sharp: "npm:^0.33.5"
+  languageName: unknown
+  linkType: soft
+
 "@payloadcms/translations@npm:3.18.0":
   version: 3.18.0
   resolution: "@payloadcms/translations@npm:3.18.0"
@@ -3348,20 +3362,6 @@ __metadata:
   checksum: 10c0/26f364ebcdb6395f95124fda411f63137a4bfb5d3a06453f7f23dfe52502905bd84e0488172e0f9ec295fdc45f05c23d5d91baf16bd26f0fe9acd777a188dc39
   languageName: node
   linkType: hard
-
-"ecommerce@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "ecommerce@workspace:."
-  dependencies:
-    "@payloadcms/next": "npm:^3.18.0"
-    "@payloadcms/payload-cloud": "npm:^3.18.0"
-    "@payloadcms/richtext-lexical": "npm:^3.18.0"
-    cross-env: "npm:^7.0.3"
-    graphql: "npm:^16.10.0"
-    payload: "npm:^3.18.0"
-    sharp: "npm:^0.33.5"
-  languageName: unknown
-  linkType: soft
 
 "emoji-regex@npm:^8.0.0":
   version: 8.0.0

@@ -1,8 +1,8 @@
 {
-  "name": "ecommerce",
+  "name": "@payloadcms/template-ecommerce",
   "version": "1.0.0",
-  "description": "/ This is my first Ecommerce Project",
-  "main": "index.js",
+  "description": "E-commerce template for Payload",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "cross-env PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts nodemon",
     "stripe:webhooks": "stripe listen --forward-to localhost:8000/stripe/webhooks",
@@ -20,9 +20,6 @@
     "lint:fix": "eslint --fix --ext .ts,.tsx src",
     "payload": "cross-env PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts payload"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@payloadcms/next": "^3.18.0",
     "@payloadcms/payload-cloud": "^3.18.0",
