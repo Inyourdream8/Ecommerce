@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "cross-env NODE_ENV=production PAYLOAD_CONFIG_PATH=payload/payload.config.ts yarn build:payload && yarn build:server && yarn copyfiles && yarn build:next",
+    "build": "cross-env NODE_ENV=production PAYLOAD_CONFIG_PATH=./payload/payload.config.ts yarn build:payload && yarn build:server && yarn copyfiles && yarn build:next",
     "build:payload": "payload build",
     "build:server": "node build/server.js",
     "copyfiles": "copyfiles -u 1 src/**/* dist/",
@@ -21,7 +21,11 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "reinstall": "cross-env NODE_OPTIONS=--no-deprecation rm -rf node_modules && rm pnpm-lock.yaml && pnpm --ignore-workspace install",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
-    "serve": "next start"
+    "serve": "next start",
+    "stripe:webhooks": "stripe listen --forward-to localhost:8000/stripe/webhooks",
+    "seed": "rm -rf media && cross-env PAYLOAD_SEED=true PAYLOAD_DROP_DATABASE=true PAYLOAD_CONFIG_PATH=./payload/payload.config.ts ts-node src/server.ts",
+    "generate:graphQLSchema": "PAYLOAD_CONFIG_PATH=./payload/payload.config.ts payload generate:graphQLSchema",
+    "eject": "yarn remove next react react-dom @next/eslint-plugin-next && ts-node eject.ts"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "latest",
