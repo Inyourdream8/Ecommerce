@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "build": "cross-env NODE_ENV=production PAYLOAD_CONFIG_PATH=payload/payload.config.ts yarn build:payload && yarn build:server && yarn copyfiles && yarn build:next",
     "postbuild": "next-sitemap --config next-sitemap.config.cjs",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "dev:prod": "cross-env NODE_OPTIONS=--no-deprecation rm -rf .next && pnpm build && pnpm start",
