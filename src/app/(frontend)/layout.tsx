@@ -1,9 +1,6 @@
-import type { Metadata } from 'next'
-
-import { cn } from '@/utilities/ui'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
 import React from 'react'
+import type { Metadata } from 'next'
+import { Jost } from 'next/font/google'
 
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
@@ -11,7 +8,14 @@ import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { draftMode } from 'next/headers'
+
+import './css/app.scss'
+
+const jost = Jost({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-jost',
+})
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -26,7 +30,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
-      <body>
+      <body className="{jost.variable}">
         <Providers>
           <AdminBar
             adminBarProps={{
@@ -35,7 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           />
 
           <Header />
-          {children}
+          <main className="main">{children}</main>
           <Footer />
         </Providers>
       </body>
