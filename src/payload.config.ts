@@ -2,7 +2,6 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 // import formBuilder from '@payloadcms/plugin-form-builder'
 import sharp from 'sharp' // sharp-import
-import dotenv from 'dotenv'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
@@ -22,9 +21,6 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 // Load environment variables from .env file
-dotenv.config({
-  path: path.resolve(__dirname, '../../.env'),
-})
 
 export default buildConfig({
   admin: {
