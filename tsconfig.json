@@ -1,27 +1,21 @@
 {
   "compilerOptions": {
-    /* Strictness */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    
-    "baseUrl": ".",
     "esModuleInterop": true,
-    "target": "ES2022",
+    "target": "es5",
     "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2022"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strictNullChecks": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,
     "jsx": "preserve",
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "sourceMap": true,
     "isolatedModules": true,
@@ -31,26 +25,19 @@
       }
     ],
     "paths": {
-      "@payload-config": [
-        "./src/payload.config.ts"
-      ],
-      "react": [
-        "./node_modules/@types/react"
-      ],
-      "@/*": [
-        "./src/*"
-      ],
+      "react": ["./node_modules/@types/react"],
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "redirects.js",
-    "next.config.js",
-    "next-sitemap.config.cjs"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "swc": true
+  }
 }
