@@ -1,24 +1,20 @@
 import React from 'react'
 
-import RichText from '@/components/RichText'
-import type { Page } from '@/payload-types'
+import { Page } from '../../../payload/payload-types'
+import { Gutter } from '../../_components/Gutter'
+import RichText from '../../_components/RichText'
+import { VerticalPadding } from '../../_components/VerticalPadding'
 
-type LowImpactHeroType =
-  | {
-      children?: React.ReactNode
-      richText?: never
-    }
-  | (Omit<Page['hero'], 'richText'> & {
-      children?: never
-      richText?: Page['hero']['richText']
-    })
+import classes from './index.module.scss'
 
-export const LowImpactHero: React.FC<LowImpactHeroType> = ({ children, richText }) => {
+export const LowImpactHero: React.FC<Page['hero']> = ({ richText }) => {
   return (
-    <div className="container mt-16">
-      <div className="max-w-[48rem]">
-        {children || (richText && <RichText data={richText} enableGutter={false} />)}
+    <Gutter className={classes.lowImpactHero}>
+      <div className={classes.content}>
+        <VerticalPadding>
+          <RichText className={classes.richText} content={richText} />
+        </VerticalPadding>
       </div>
-    </div>
+    </Gutter>
   )
 }

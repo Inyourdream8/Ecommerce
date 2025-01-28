@@ -3,82 +3,87 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import Link from 'next/link'
 
-import { Media } from '@/components/Media'
-import type { Post } from '@/payload-types'
-import { cn } from '@/utilities/ui'
-import useClickableCard from '@/utilities/useClickableCard'
+import { Product } from '../../../payload/payload-types'
+import { Media } from '../Media'
+import { Price } from '../Price'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title'>
+import classes from './index.module.scss'
+
+const priceFromJSON = (priceJSON): string => {
+  let price = ''
+
+  if (priceJSON) {
+    try {
+      const parsed = JSON.parse(priceJSON)?.data[0]
+      const priceValue = parsed.unit_amount
+      const priceType = parsed.type
+      price = `${parsed.currency === 'usd' ? '$' : ''}${(priceValue / 100).toFixed(2)}`
+      if (priceType === 'recurring') {
+        price += `/${
+          parsed.recurring.interval_count > 1
+            ? `${parsed.recurring.interval_count} ${parsed.recurring.interval}`
+            : parsed.recurring.interval
+        }`
+      }
+    } catch (e) {
+      console.error(`Cannot parse priceJSON`) // eslint-disable-line no-console
+    }
+  }
+
+  return price
+}
 
 export const Card: React.FC<{
   alignItems?: 'center'
   className?: string
-  doc?: CardPostData
-  relationTo?: 'posts'
   showCategories?: boolean
+  hideImagesOnMobile?: boolean
   title?: string
+  relationTo?: 'products'
+  doc?: Product
 }> = props => {
-  const { card, link } = useClickableCard({})
-  const { className, doc, relationTo, showCategories, title: titleFromProps } = props
+  const {
+    showCategories,
+    title: titleFromProps,
+    doc,
+    doc: { slug, title, categories, meta, priceJSON } = {},
+    className,
+  } = props
 
-  const { slug, categories, meta, title } = doc || {}
   const { description, image: metaImage } = meta || {}
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
-  const href = `/${relationTo}/${slug}`
+  const href = `/products/${slug}`
+
+  const [
+    price, // eslint-disable-line no-unused-vars
+    setPrice,
+  ] = useState(() => priceFromJSON(priceJSON))
+
+  useEffect(() => {
+    setPrice(priceFromJSON(priceJSON))
+  }, [priceJSON])
 
   return (
-    <article
-      className={cn(
-        'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer',
-        className,
-      )}
-      ref={card.ref}
-    >
-      <div className="relative w-full ">
-        {!metaImage && <div className="">No image</div>}
-        {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
+    <Link href={href} className={[classes.card, className].filter(Boolean).join(' ')}>
+      <div className={classes.mediaWrapper}>
+        {!metaImage && <div className={classes.placeholder}>No image</div>}
+        {metaImage && typeof metaImage !== 'string' && (
+          <Media imgClassName={classes.image} resource={metaImage} fill />
+        )}
       </div>
-      <div className="p-4">
-        {showCategories && hasCategories && (
-          <div className="uppercase text-sm mb-4">
-            {showCategories && hasCategories && (
-              <div>
-                {categories?.map((category, index) => {
-                  if (typeof category === 'object') {
-                    const { title: titleFromCategory } = category
 
-                    const categoryTitle = titleFromCategory || 'Untitled category'
-
-                    const isLast = index === categories.length - 1
-
-                    return (
-                      <Fragment key={index}>
-                        {categoryTitle}
-                        {!isLast && <Fragment>, &nbsp;</Fragment>}
-                      </Fragment>
-                    )
-                  }
-
-                  return null
-                })}
-              </div>
-            )}
+      <div className={classes.content}>
+        {titleToUse && <h4 className={classes.title}>{titleToUse}</h4>}
+        {description && (
+          <div className={classes.body}>
+            {description && <p className={classes.description}>{sanitizedDescription}</p>}
           </div>
         )}
-        {titleToUse && (
-          <div className="prose">
-            <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
-                {titleToUse}
-              </Link>
-            </h3>
-          </div>
-        )}
-        {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {doc && <Price product={doc} />}
       </div>
-    </article>
+    </Link>
   )
 }

@@ -1,23 +1,59 @@
-import * as React from 'react'
+import React from 'react'
+import { FieldValues, UseFormRegister, Validate } from 'react-hook-form'
 
-import { cn } from '@/utilities/ui'
+import classes from './index.module.scss'
 
-const Input: React.FC<
-  {
-    ref?: React.Ref<HTMLInputElement>
-  } & React.InputHTMLAttributes<HTMLInputElement>
-> = ({ type, className, ref, ...props }) => {
-  return (
-    <input
-      className={cn(
-        'flex h-10 w-full rounded border border-border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-        className,
-      )}
-      ref={ref}
-      type={type}
-      {...props}
-    />
-  )
+type Props = {
+  name: string
+  label: string
+  register: UseFormRegister<FieldValues & any>
+  required?: boolean
+  error: any
+  type?: 'text' | 'number' | 'password' | 'email'
+  validate?: (value: string) => boolean | string
+  disabled?: boolean
 }
 
-export { Input }
+export const Input: React.FC<Props> = ({
+  name,
+  label,
+  required,
+  register,
+  error,
+  type = 'text',
+  validate,
+  disabled,
+}) => {
+  return (
+    <div className={classes.inputWrap}>
+      <label htmlFor="name" className={classes.label}>
+        {label}
+        {required ? <span className={classes.asterisk}>&nbsp;*</span> : ''}
+      </label>
+      <input
+        className={[classes.input, error && classes.error].filter(Boolean).join(' ')}
+        {...{ type }}
+        {...register(name, {
+          required,
+          validate,
+          ...(type === 'email'
+            ? {
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: 'Please enter a valid email',
+                },
+              }
+            : {}),
+        })}
+        disabled={disabled}
+      />
+      {error && (
+        <div className={classes.errorMessage}>
+          {!error?.message && error?.type === 'required'
+            ? 'This field is required'
+            : error?.message}
+        </div>
+      )}
+    </div>
+  )
+}

@@ -1,45 +1,35 @@
 import React from 'react'
 
-import { CMSLink } from '@/components/Link'
-import { Media } from '@/components/Media'
-import RichText from '@/components/RichText'
-import type { Page } from '@/payload-types'
+import { Page } from '../../../payload/payload-types'
+import { Gutter } from '../../_components/Gutter'
+import { CMSLink } from '../../_components/Link'
+import { Media } from '../../_components/Media'
+import RichText from '../../_components/RichText'
 
-export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
+import classes from './index.module.scss'
+
+export const MediumImpactHero: React.FC<Page['hero']> = props => {
+  const { richText, media, links } = props
+
   return (
-    <div className="">
-      <div className="container mb-8">
-        {richText && <RichText className="mb-6" data={richText} enableGutter={false} />}
-
-        {Array.isArray(links) && links.length > 0 && (
-          <ul className="flex gap-4">
+    <Gutter className={classes.hero}>
+      <div className={classes.background}>
+        <RichText className={classes.richText} content={richText} />
+        {Array.isArray(links) && (
+          <ul className={classes.links}>
             {links.map(({ link }, i) => {
               return (
                 <li key={i}>
-                  <CMSLink {...link} />
+                  <CMSLink className={classes.link} {...link} />
                 </li>
               )
             })}
           </ul>
         )}
       </div>
-      <div className="container ">
-        {media && typeof media === 'object' && (
-          <div>
-            <Media
-              className="-mx-4 md:-mx-8 2xl:-mx-16"
-              imgClassName=""
-              priority
-              resource={media}
-            />
-            {media?.caption && (
-              <div className="mt-3">
-                <RichText data={media.caption} enableGutter={false} />
-              </div>
-            )}
-          </div>
-        )}
+      <div className={classes.media}>
+        {typeof media === 'object' && <Media className={classes.media} resource={media} />}
       </div>
-    </div>
+    </Gutter>
   )
 }

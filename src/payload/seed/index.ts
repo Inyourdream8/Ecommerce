@@ -2,6 +2,16 @@ import fs from 'fs'
 import path from 'path'
 import type { Payload } from 'payload'
 
+import { cartPage } from './cart-page'
+import { home } from './home'
+import { image1 } from './image-1'
+import { image2 } from './image-2'
+import { image3 } from './image-3'
+import { product1 } from './product-1'
+import { product2 } from './product-2'
+import { product3 } from './product-3'
+import { productsPage } from './product-page'
+
 const collections = ['categories', 'media', 'pages', 'products']
 const globals = ['header', 'settings', 'footer']
 

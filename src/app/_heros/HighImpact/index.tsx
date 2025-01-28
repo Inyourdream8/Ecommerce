@@ -1,45 +1,43 @@
-'use client'
-import React, { useEffect } from 'react'
+import React, { Fragment } from 'react'
 
-import { CMSLink } from '@/components/Link'
-import { Media } from '@/components/Media'
-import RichText from '@/components/RichText'
-import type { Page } from '@/payload-types'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { Page } from '../../../payload/payload-types'
+import { Gutter } from '../../_components/Gutter'
+import { CMSLink } from '../../_components/Link'
+import { Media } from '../../_components/Media'
+import RichText from '../../_components/RichText'
 
-export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
-  const { setHeaderTheme } = useHeaderTheme()
+import classes from './index.module.scss'
 
-  useEffect(() => {
-    setHeaderTheme('dark')
-  })
-
+export const HighImpactHero: React.FC<Page['hero']> = ({ richText, media, links }) => {
   return (
-    <div
-      className="relative -mt-[10.4rem] flex items-center justify-center text-white"
-      data-theme="dark"
-    >
-      <div className="container mb-8 z-10 relative flex items-center justify-center">
-        <div className="max-w-[36.5rem] md:text-center">
-          {richText && <RichText className="mb-6" data={richText} enableGutter={false} />}
-          {Array.isArray(links) && links.length > 0 && (
-            <ul className="flex md:justify-center gap-4">
-              {links.map(({ link }, i) => {
-                return (
-                  <li key={i}>
-                    <CMSLink {...link} />
-                  </li>
-                )
-              })}
-            </ul>
-          )}
-        </div>
-      </div>
-      <div className="min-h-[80vh] select-none">
-        {media && typeof media === 'object' && (
-          <Media fill imgClassName="-z-10 object-cover" priority resource={media} />
+    <Gutter className={classes.hero}>
+      <div className={classes.content}>
+        <RichText content={richText} />
+        {Array.isArray(links) && links.length > 0 && (
+          <ul className={classes.links}>
+            {links.map(({ link }, i) => {
+              return (
+                <li key={i}>
+                  <CMSLink {...link} />
+                </li>
+              )
+            })}
+          </ul>
         )}
       </div>
-    </div>
+      <div className={classes.media}>
+        {typeof media === 'object' && (
+          <Fragment>
+            <Media
+              resource={media}
+              // fill
+              imgClassName={classes.image}
+              priority
+            />
+            {media?.caption && <RichText content={media.caption} className={classes.caption} />}
+          </Fragment>
+        )}
+      </div>
+    </Gutter>
   )
 }

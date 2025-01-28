@@ -1,102 +1,46 @@
-'use client'
 import React from 'react'
-import { useRouter } from 'next/navigation'
 
-import {
-  Pagination as PaginationComponent,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
-import { cn } from '@/utilities/ui'
+import { Chevron } from '../Chevron'
+
+import classes from './index.module.scss'
 
 export const Pagination: React.FC<{
-  className?: string
   page: number
   totalPages: number
+  onClick: (page: number) => void
+  className?: string
 }> = props => {
-  const router = useRouter()
-
-  const { className, page, totalPages } = props
+  const { page, totalPages, onClick, className } = props
   const hasNextPage = page < totalPages
   const hasPrevPage = page > 1
 
-  const hasExtraPrevPages = page - 1 > 1
-  const hasExtraNextPages = page + 1 < totalPages
-
   return (
-    <div className={cn('my-12', className)}>
-      <PaginationComponent>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              disabled={!hasPrevPage}
-              onClick={() => {
-                router.push(`/posts/page/${page - 1}`)
-              }}
-            />
-          </PaginationItem>
-
-          {hasExtraPrevPages && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )}
-
-          {hasPrevPage && (
-            <PaginationItem>
-              <PaginationLink
-                onClick={() => {
-                  router.push(`/posts/page/${page - 1}`)
-                }}
-              >
-                {page - 1}
-              </PaginationLink>
-            </PaginationItem>
-          )}
-
-          <PaginationItem>
-            <PaginationLink
-              isActive
-              onClick={() => {
-                router.push(`/posts/page/${page}`)
-              }}
-            >
-              {page}
-            </PaginationLink>
-          </PaginationItem>
-
-          {hasNextPage && (
-            <PaginationItem>
-              <PaginationLink
-                onClick={() => {
-                  router.push(`/posts/page/${page + 1}`)
-                }}
-              >
-                {page + 1}
-              </PaginationLink>
-            </PaginationItem>
-          )}
-
-          {hasExtraNextPages && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )}
-
-          <PaginationItem>
-            <PaginationNext
-              disabled={!hasNextPage}
-              onClick={() => {
-                router.push(`/posts/page/${page + 1}`)
-              }}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </PaginationComponent>
+    <div className={[classes.pagination, className].filter(Boolean).join(' ')}>
+      <button
+        type="button"
+        className={classes.button}
+        disabled={!hasPrevPage}
+        onClick={() => {
+          onClick(page - 1)
+        }}
+      >
+        <Chevron rotate={90} className={classes.icon} />
+      </button>
+      <div className={classes.pageRange}>
+        <span className={classes.pageRangeLabel}>
+          Page {page} of {totalPages}
+        </span>
+      </div>
+      <button
+        type="button"
+        className={classes.button}
+        disabled={!hasNextPage}
+        onClick={() => {
+          onClick(page + 1)
+        }}
+      >
+        <Chevron rotate={-90} className={classes.icon} />
+      </button>
     </div>
   )
 }

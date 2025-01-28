@@ -1,30 +1,13 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useRouter, useSelectedLayoutSegments } from 'next/navigation'
-import type { PayloadAdminBarProps, PayloadMeUser } from 'payload-admin-bar'
-import { PayloadAdminBar } from 'payload-admin-bar'
+import React, { useEffect } from 'react'
+import { useSelectedLayoutSegments } from 'next/navigation'
+import { PayloadAdminBar, PayloadAdminBarProps } from 'payload-admin-bar'
 
-import './index.scss'
-import { getClientSideURL } from '@/utilities/getURL'
-import { cn } from '@/utilities/ui'
+import { useAuth } from '../../_providers/Auth'
+import { Gutter } from '../Gutter'
 
-const baseClass = 'admin-bar'
-
-const collectionLabels = {
-  pages: {
-    plural: 'Pages',
-    singular: 'Page',
-  },
-  posts: {
-    plural: 'Posts',
-    singular: 'Post',
-  },
-  projects: {
-    plural: 'Projects',
-    singular: 'Project',
-  },
-}
+import classes from './index.module.scss'
 
 const Title: React.FC = () => <span>Dashboard</span>
 
@@ -33,54 +16,48 @@ export const AdminBar: React.FC<{
 }> = props => {
   const { adminBarProps } = props || {}
   const segments = useSelectedLayoutSegments()
-  const [show, setShow] = useState(false)
-  const collection = (
-    collectionLabels[segments?.[1] as keyof typeof collectionLabels] ? segments[1] : 'pages'
-  ) as keyof typeof collectionLabels
-  const router = useRouter()
+  const collection = segments?.[1] === 'products' ? 'products' : 'pages'
+  const [show, setShow] = React.useState(false)
 
-  const onAuthChange = React.useCallback((user: PayloadMeUser) => {
-    setShow(Boolean(user?.id))
-  }, [])
+  const { user } = useAuth()
+
+  useEffect(() => {
+    if (user) {
+      setShow(true)
+    }
+  }, [user])
+
+  const isAdmin = user?.roles?.includes('admin')
+
+  if (!isAdmin) return null
 
   return (
-    <div
-      className={cn(baseClass, 'py-2 bg-black text-white', {
-        block: show,
-        hidden: !show,
-      })}
-    >
-      <div className="container">
+    <div className={[classes.adminBar, show && classes.show].filter(Boolean).join(' ')}>
+      <Gutter className={classes.blockContainer}>
         <PayloadAdminBar
           {...adminBarProps}
-          className="py-2 text-white"
-          classNames={{
-            controls: 'font-medium text-white',
-            logo: 'text-white',
-            user: 'text-white',
-          }}
-          cmsURL={getClientSideURL()}
           collection={collection}
           collectionLabels={{
-            plural: collectionLabels[collection]?.plural || 'Pages',
-            singular: collectionLabels[collection]?.singular || 'Page',
+            singular: collection === 'products' ? 'Product' : 'Page',
+            plural: collection === 'products' ? 'Products' : 'Pages',
+          }}
+          key={user?.id} // use key to get the admin bar to re-run its `me` request
+          cmsURL={process.env.NEXT_PUBLIC_SERVER_URL}
+          className={classes.payloadAdminBar}
+          classNames={{
+            user: classes.user,
+            logo: classes.logo,
+            controls: classes.controls,
           }}
           logo={<Title />}
-          onAuthChange={onAuthChange}
-          onPreviewExit={() => {
-            fetch('/next/exit-preview').then(() => {
-              router.push('/')
-              router.refresh()
-            })
-          }}
           style={{
-            backgroundColor: 'transparent',
-            padding: 0,
             position: 'relative',
             zIndex: 'unset',
+            padding: 0,
+            backgroundColor: 'transparent',
           }}
         />
-      </div>
+      </Gutter>
     </div>
   )
 }

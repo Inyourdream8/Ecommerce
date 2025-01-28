@@ -2,20 +2,18 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
+import canUseDOM from '../../_utilities/canUseDOM'
 import { defaultTheme, getImplicitPreference, themeLocalStorageKey } from './shared'
-import type { Theme, ThemeContextType } from './types'
-import { themeIsValid } from './types'
-
-import canUseDOM from '@/utilities/canUseDOM'
+import { Theme, ThemeContextType, themeIsValid } from './types'
 
 const initialContext: ThemeContextType = {
-  setTheme: () => null,
   theme: undefined,
+  setTheme: () => null,
 }
 
 const ThemeContext = createContext(initialContext)
 
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+export const ThemeProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme | undefined>(
     canUseDOM ? (document.documentElement.getAttribute('data-theme') as Theme) : undefined,
   )
@@ -47,11 +45,15 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
-    setThemeState(themeToSet)
+    document.documentElement.setAttribute('data-theme', defaultTheme)
+    setThemeState(defaultTheme)
   }, [])
 
-  return <ThemeContext.Provider value={{ setTheme, theme }}>{children}</ThemeContext.Provider>
+  return (
+    <ThemeContext.Provider value={{ theme: defaultTheme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  )
 }
 
 export const useTheme = (): ThemeContextType => useContext(ThemeContext)

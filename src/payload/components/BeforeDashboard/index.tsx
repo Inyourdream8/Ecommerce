@@ -1,5 +1,6 @@
 import React from 'react'
-import { Banner } from '@payloadcms/ui/elements/Banner'
+import { Link } from 'react-router-dom'
+import { Banner } from 'payload/components'
 
 import { SeedButton } from './SeedButton'
 
@@ -17,11 +18,35 @@ const BeforeDashboard: React.FC = () => {
       <ul className={`${baseClass}__instructions`}>
         <li>
           <SeedButton />
-          {' with a few pages, posts, and projects to jump-start your new site, then '}
-          <a href="/" target="_blank">
-            visit your website
-          </a>
+          {' with a few products and pages to jump-start your new project, then '}
+          <a href="/">visit your website</a>
           {' to see the results.'}
+        </li>
+        <li>
+          {'Head over to '}
+          <a
+            href="https://dashboard.stripe.com/test/apikeys"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {'Stripe to obtain your API Keys'}
+          </a>
+          {
+            '. Create a new account if needed, then copy them into your environment variables and restart your server. See the '
+          }
+          <a
+            href="https://github.com/payloadcms/payload/blob/main/templates/ecommerce/README.md#stripe"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {'README'}
+          </a>
+          {' for more details.'}
+        </li>
+        <li>
+          <Link to="/admin/collections/products">Link each of your products</Link>
+          {' to Stripe by selecting the corresponding product using the dropdown under '}
+          <i>Product Details</i>.
         </li>
         <li>
           If you created this repo using Payload Cloud, head over to GitHub and clone it to your
@@ -32,24 +57,24 @@ const BeforeDashboard: React.FC = () => {
           {'Modify your '}
           <a
             href="https://payloadcms.com/docs/configuration/collections"
-            rel="noopener noreferrer"
             target="_blank"
+            rel="noopener noreferrer"
           >
             collections
           </a>
           {' and add more '}
           <a
             href="https://payloadcms.com/docs/fields/overview"
-            rel="noopener noreferrer"
             target="_blank"
+            rel="noopener noreferrer"
           >
             fields
           </a>
           {' as needed. If you are new to Payload, we also recommend you check out the '}
           <a
             href="https://payloadcms.com/docs/getting-started/what-is-payload"
-            rel="noopener noreferrer"
             target="_blank"
+            rel="noopener noreferrer"
           >
             Getting Started
           </a>
@@ -61,9 +86,9 @@ const BeforeDashboard: React.FC = () => {
       </ul>
       {'Pro Tip: This block is a '}
       <a
-        href="https://payloadcms.com/docs/admin/components#base-component-overrides"
-        rel="noopener noreferrer"
+        href={'https://payloadcms.com/docs/admin/components#base-component-overrides'}
         target="_blank"
+        rel="noopener noreferrer"
       >
         custom component
       </a>

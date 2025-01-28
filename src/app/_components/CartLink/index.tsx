@@ -1,66 +1,31 @@
-import React from 'react'
+'use client'
+
+import React, { Fragment, useEffect, useState } from 'react'
 import Link from 'next/link'
 
-import { Button, type ButtonProps } from '@/components/ui/button'
-import type { Page, Post } from '@/payload-types'
-import { cn } from '@/utilities/ui'
+import { useCart } from '../../_providers/Cart'
 
-type CMSLinkType = {
-  appearance?: 'inline' | ButtonProps['variant']
-  children?: React.ReactNode
+import classes from './index.module.scss'
+
+export const CartLink: React.FC<{
   className?: string
-  label?: string | null
-  newTab?: boolean | null
-  reference?: {
-    relationTo: 'pages' | 'posts'
-    value: Page | Post | string | number
-  } | null
-  size?: ButtonProps['size'] | null
-  type?: 'custom' | 'reference' | null
-  url?: string | null
-}
+}> = props => {
+  const { className } = props
+  const { cart } = useCart()
+  const [length, setLength] = useState<number>()
 
-export const CMSLink: React.FC<CMSLinkType> = props => {
-  const {
-    type,
-    appearance = 'inline',
-    children,
-    className,
-    label,
-    newTab,
-    reference,
-    size: sizeFromProps,
-    url,
-  } = props
-
-  const href =
-    type === 'reference' && typeof reference?.value === 'object' && reference.value.slug
-      ? `${reference?.relationTo !== 'pages' ? `/${reference?.relationTo}` : ''}/${
-          reference.value.slug
-        }`
-      : url
-
-  if (!href) return null
-
-  const size = appearance === 'link' ? 'clear' : sizeFromProps
-  const newTabProps = newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {}
-
-  /* Ensure we don't break any styles set by richText */
-  if (appearance === 'inline') {
-    return (
-      <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
-        {label && label}
-        {children && children}
-      </Link>
-    )
-  }
+  useEffect(() => {
+    setLength(cart?.items?.length || 0)
+  }, [cart])
 
   return (
-    <Button asChild className={className} size={size} variant={appearance}>
-      <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
-        {label && label}
-        {children && children}
-      </Link>
-    </Button>
+    <Link className={[classes.cartLink, className].filter(Boolean).join(' ')} href="/cart">
+      <Fragment>
+        Cart
+        {typeof length === 'number' && length > 0 && (
+          <small className={classes.quantity}>({length})</small>
+        )}
+      </Fragment>
+    </Link>
   )
 }
