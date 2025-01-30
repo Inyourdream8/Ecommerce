@@ -33,3 +33,4 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = props => {
     </div>
   )
 }
+
