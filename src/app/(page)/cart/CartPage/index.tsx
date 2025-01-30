@@ -114,8 +114,8 @@ export const CartPage: React.FC<{
                 <Button
                   className={classes.checkoutButton}
                   href={user ? '/checkout' : '/login?redirect=%2Fcheckout'}
-                  LabeL={user ? 'Checkout' : 'Login to checkout'}
-                  appearence="primary"
+                  label={user ? 'Checkout' : 'Login to checkout'}
+                  appearance="primary"
                 />
               </div>
             </div>
