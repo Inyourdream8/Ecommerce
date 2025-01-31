@@ -18,24 +18,24 @@ export type CartItems =
     }[]
   | null;
 
-export interface Config {
-  collections: {
-    pages: Page;
-    products: Product;
-    orders: Order;
-    media: Media;
-    categories: Category;
-    users: User;
-    redirects: Redirect;
-    'payload-preferences': PayloadPreference;
-    'payload-migrations': PayloadMigration;
-  };
-  globals: {
-    settings: Settings;
-    header: Header;
-    footer: Footer;
-  };
-}
+  export interface Config {
+    collections: {
+      pages: Page;
+      products: Product;
+      orders: Order;
+      media: Media;
+      categories: Category;
+      users: User;
+      redirects: Redirect;
+      'payload-preferences': PayloadPreference;
+      'payload-migrations': PayloadMigration;
+    };
+    globals: {
+      settings: Settings;
+      header: Header;
+      footer: Footer;
+    };
+  }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
@@ -579,8 +579,6 @@ export interface Footer {
   updatedAt?: string | null;
   createdAt?: string | null;
 }
-
-
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}
 }
