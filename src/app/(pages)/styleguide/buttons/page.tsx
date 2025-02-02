@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
-import { CallToActionBlock } from '../../../_blocks/CallToAction'
+import { CallToAction } from '../../../../payload/blocks/CallToAction'
 import { Button } from '../../../_components/Button'
 import { Gutter } from '../../../_components/Gutter'
 import { VerticalPadding } from '../../../_components/VerticalPadding'
