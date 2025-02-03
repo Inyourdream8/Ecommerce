@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import classes from './index.module.scss'
 
@@ -11,8 +11,11 @@ const Promotion = () => {
     seconds: 0,
   })
 
-  const targetDate = new Date()
-  targetDate.setDate(targetDate.getDate() + 3)
+  const targetDate = useMemo(() => {
+    const date = new Date()
+    date.setDate(date.getDate() + 3)
+    return date
+  }, [])
 
   useEffect(() => {
     const timerInterval = setInterval(() => {
@@ -32,10 +35,8 @@ const Promotion = () => {
       }
     }, 1000)
 
-    return () => {
-      clearInterval(timerInterval) // Cleanup the interval when the component unmounts.
-    }
-  }, [])
+    return () => clearInterval(timerInterval)
+  }, [targetDate])
 
   return (
     <section className={classes.promotion}>

@@ -36,4 +36,3 @@ export const CallToActionBlock: React.FC<
     </Gutter>
   )
 }
-

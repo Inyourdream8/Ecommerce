@@ -4,7 +4,7 @@ import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react
 import qs from 'qs'
 
 import { Category, Product } from '../../../payload/payload-types'
-import type { ArchiveBlockProps } from '../../blocks/ArchiveBlock/type'
+import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock/type'
 import { useFilter } from '../../_providers/Filter'
 import { Card } from '../Card'
 import { PageRange } from '../PageRange'
